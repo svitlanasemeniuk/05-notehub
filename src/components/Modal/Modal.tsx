@@ -15,20 +15,25 @@ const Modal = ({ isOpen, children, onClose }: ModalProps) => {
                 onClose();
             }
         };
+
         if (isOpen) {
             window.addEventListener('keydown', handleKeyDown);
-        };
+            document.body.style.overflow = 'hidden';
+        }
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
         };
     }, [isOpen, onClose]);
 
     if (!isOpen) return null;
-const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+
+    const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
             onClose();
         }
-};
+    };
     
     return createPortal(
         <div className={css.backdrop} onClick={handleBackdropClick} role="dialog" aria-modal="true">
@@ -39,4 +44,5 @@ const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
         document.body
     );
 };
+
 export default Modal;

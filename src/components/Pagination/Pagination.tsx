@@ -1,27 +1,47 @@
-import ReactPaginate from 'react-paginate';
-import css from './Pagination.module.css'; 
+import type { ComponentType } from "react";
+import ReactPaginateModule from "react-paginate";
+import type { ReactPaginateProps } from "react-paginate";
+import css from './Pagination.module.css';
+
+
+type ModuleWithDefault<T> = { default: T };
+const ReactPaginate = (
+    ReactPaginateModule as unknown as
+    ModuleWithDefault<ComponentType<ReactPaginateProps>>
+).default;
 
 interface PaginationProps {
     totalPages: number;
-    onPageChange: (selectedPage: number) => void;
+    onPageChange: (page: number) => void;
+    currentPage: number; 
 }
 
-const Pagination = ({ totalPages, onPageChange }: PaginationProps) => {
-    
-    const Component = ReactPaginate as unknown as { default: typeof ReactPaginate };
-    const RealReactPaginate = Component.default || ReactPaginate;
+const Pagination = ({ totalPages, onPageChange, currentPage }: PaginationProps) => {
+    const handlePageClick = (event: { selected: number }) => {
+        onPageChange(event.selected + 1);
+    };
 
     return (
-        <RealReactPaginate
-            pageCount={totalPages} 
-            onPageChange={(event: { selected: number }) => {
-                onPageChange(event.selected + 1); 
-            }}
-            containerClassName={css.pagination}
-            activeClassName={css.active}
+        <ReactPaginate
+            pageCount={totalPages}
+            onPageChange={handlePageClick}
+            forcePage={currentPage - 1} 
+            
+            containerClassName={css.container}
             pageClassName={css.pageItem}
-            previousLabel="<"
-            nextLabel=">"
+            pageLinkClassName={css.pageLink}
+
+            previousClassName={css.pageItem}                
+            previousLinkClassName={css.pageLink}
+
+            nextClassName={css.pageItem}                
+            nextLinkClassName={css.pageLink}
+
+            activeLinkClassName={css.activeLink}
+            disabledLinkClassName={css.disabledLink}
+
+            previousLabel="←"
+            nextLabel="→"
         />
     );
 };

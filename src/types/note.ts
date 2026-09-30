@@ -3,5 +3,6 @@ export interface Note {
   title: string;
   content: string;
   tag: string;
-  // додай сюди інші поля, які повертає сервер
+  createdAt: string;
+  updatedAt: string;
 }
